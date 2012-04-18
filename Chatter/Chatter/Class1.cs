@@ -8,8 +8,10 @@ using System.ComponentModel;
 
 namespace Chatter
 {
+    [APIVersion(1, 11)]
     class Main : TerrariaPlugin
     {
+        
         public Main(Terraria.Main game)
             : base(game)
         {
@@ -74,7 +76,6 @@ namespace Chatter
                 args.Handled = true;
                 string[] Messagearr = msg.Split(' ');
                 string cmd = Messagearr[0].Substring(1);
-                Messagearr[0] = sender.Name;
                 switch (cmd)
                 {
                     case "red":
@@ -83,6 +84,10 @@ namespace Chatter
                     case "green":
                         Chat(Color.Green, Messagearr);
                         break;
+                    case "whisp":
+                        Whisper(sender, Messagearr);
+                        break;
+
                     default:
                         sender.SendMessage("Erdbeerkäse =)");
                         break;
@@ -92,9 +97,34 @@ namespace Chatter
         }
         private void Chat(Color color, string[] words)
         {
-
+            words[0] = "";
             String message = String.Join(" ", words);
             TSPlayer.All.SendMessage(message, color);
+        }
+        private void Whisper(TSPlayer sender, string[] Message)
+        {
+            TSPlayer target = null;
+            for (int i = 0; i < TShock.Players.Length; i++)
+            {
+                if (Message[1] == TShock.Players.ElementAt(i).Name)
+                {
+                    target = TShock.Players.ElementAt(i);
+                    break;
+                }
+                else if (TShock.Players.ElementAt(i + 1) == null)
+                    break;
+
+            }
+            if (target == null)
+            {
+                sender.SendMessage("Den Spieler " + Message[1] + " gibt es nicht");
+                return;
+            }
+            Message[0] = "";
+            Message[1] = "";
+            String finalmessage = String.Join(" ", Message);
+            sender.SendMessage("Message send to " + target.Name + " " + finalmessage);
+            target.SendMessage("Message from " + sender.Name + " " + finalmessage);
         }
     }
 }
