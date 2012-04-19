@@ -52,6 +52,7 @@ namespace Chatter
         {
             Hooks.ServerHooks.Chat += OnChat;
 
+
         }
         protected override void Dispose(bool disposing)
         {
@@ -79,10 +80,10 @@ namespace Chatter
                 switch (cmd)
                 {
                     case "red":
-                        Chat(Color.Red, Messagearr);
+                        Chat(Color.Red, Messagearr,sender.Name);
                         break;
                     case "green":
-                        Chat(Color.Green, Messagearr);
+                        Chat(Color.Green, Messagearr, sender.Name);
                         break;
                     case "whisp":
                         Whisper(sender, Messagearr);
@@ -95,9 +96,9 @@ namespace Chatter
                 }
             }
         }
-        private void Chat(Color color, string[] words)
+        private void Chat(Color color, string[] words, string name)
         {
-            words[0] = "";
+            words[0] = name+": ";
             String message = String.Join(" ", words);
             TSPlayer.All.SendMessage(message, color);
         }
