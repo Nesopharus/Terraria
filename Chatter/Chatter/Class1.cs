@@ -51,6 +51,7 @@ namespace Chatter
         public override void Initialize()
         {
             Hooks.ServerHooks.Chat += OnChat;
+            Hooks.ServerHooks.Join += OnJoin;
 
 
         }
@@ -126,6 +127,11 @@ namespace Chatter
             String finalmessage = String.Join(" ", Message);
             sender.SendMessage("Message send to " + target.Name + " " + finalmessage);
             target.SendMessage("Message from " + sender.Name + " " + finalmessage);
+        }
+        private void OnJoin(int playerid,HandledEventArgs args)
+        {
+            TSPlayer player = TShock.Players[playerid];
+            player.SetTeam(1);
         }
     }
 }
